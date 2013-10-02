@@ -1,7 +1,7 @@
 #include "Information.hpp"
 #include <iostream>
 
-static Information  foo = 147_bit;
+Information  foo = 147_bit;
 
 Information bar(void)
 {
