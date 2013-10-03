@@ -124,11 +124,17 @@ constexpr Information word(1_word);
 constexpr Information dword(1_dword);
 constexpr Information qword(1_qword);
 
-// http://www.codeproject.com/Articles/447922/Application-of-Cplusplus11-User-Defined-Literals-t
-constexpr unsigned long long ToBinary(const unsigned long long x, char const * const s)
+namespace InformationPrivate
 {
-    return (!*s ? x : ToBinary(x + x + (*s == '1' ? 1 : 0), s + 1));
+// http://www.codeproject.com/Articles/447922/Application-of-Cplusplus11-User-Defined-Literals-t
+// with modifications based on this SO answer:
+// http://stackoverflow.com/a/19168580/2003487
+constexpr unsigned long long __M_to_binary(const unsigned long long x, char const * const s)
+{
+    return (!*s ? x : __M_to_binary(x + x + (*s == '1' ? 1 : 0), s + 1));
 }
-constexpr unsigned long long operator"" _b(const char * s){return ToBinary(0, s);}
+constexpr unsigned long long operator"" _b(const char * s){return __M_to_binary(0, s);}
+}
+using InformationPrivate::operator"" _b;
 
 #endif /* INFORMATION_HPP_ */
