@@ -32,6 +32,12 @@ class Information
 {
 public:
 typedef std::size_t value_t;
+typedef struct pair
+{
+    value_t     q; // quotient
+    value_t     r; // remainder
+    constexpr pair(const value_t q, const value_t r) : q(q), r(r) {}
+} pair_t;
 constexpr Information() : m_amount(0){}
 constexpr Information(const Information & rhs) : m_amount(rhs.m_amount) {}
 constexpr value_t value(void) const {return m_amount;}
@@ -84,6 +90,7 @@ constexpr Information operator+(const Information & rhs) const {return Informati
 constexpr Information operator-(const Information & rhs) const {return Information(m_amount - rhs.m_amount);}
 constexpr Information operator*(const value_t rhs) const {return Information(m_amount * rhs);}
 constexpr Information operator/(const value_t rhs) const {return Information(m_amount / rhs);}
+constexpr value_t operator/(const Information & rhs) const {return m_amount / rhs.m_amount;}
 constexpr bool operator==(const Information & rhs) const {return m_amount == rhs.m_amount;}
 constexpr bool operator!=(const Information & rhs) const {return m_amount != rhs.m_amount;}
 constexpr bool operator<=(const Information & rhs) const {return m_amount <= rhs.m_amount;}
@@ -91,7 +98,9 @@ constexpr bool operator>=(const Information & rhs) const {return m_amount >= rhs
 constexpr bool operator<(const Information & rhs) const {return m_amount < rhs.m_amount;}
 constexpr bool operator>(const Information & rhs) const {return m_amount > rhs.m_amount;}
 
-constexpr value_t to(const Information & rhs) const {return (m_amount / rhs.m_amount);}
+constexpr value_t to(const Information & rhs) const {return *this / rhs;}
+constexpr pair_t div(const Information & rhs) const {return pair(m_amount / rhs.m_amount, m_amount % rhs.m_amount);}
+constexpr pair_t convert(const Information & rhs) const {return this->div(rhs);}
 
 friend constexpr Information operator"" _bit(unsigned long long x);
 friend constexpr Information operator"" _nibble(unsigned long long x);
@@ -103,7 +112,7 @@ friend constexpr Information operator"" _qword(unsigned long long x);
 
 private:
 std::size_t  m_amount;
-constexpr Information(value_t amount) : m_amount(amount) {}
+constexpr Information(const value_t amount) : m_amount(amount) {}
 };
 
 constexpr Information operator*(const Information::value_t lhs, const Information & rhs) {return rhs * lhs;}
