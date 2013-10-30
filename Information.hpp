@@ -57,6 +57,7 @@ constexpr Information operator-(const Information & rhs) const {return Informati
 constexpr Information operator*(const value_t rhs) const {return Information(m_amount * rhs);}
 constexpr Information operator/(const value_t rhs) const {return Information(m_amount / rhs);}
 constexpr value_t operator/(const Information & rhs) const {return m_amount / rhs.m_amount;}
+constexpr value_t operator%(const Information & rhs) const {return m_amount % rhs.m_amount;}
 constexpr bool operator==(const Information & rhs) const {return m_amount == rhs.m_amount;}
 constexpr bool operator!=(const Information & rhs) const {return m_amount != rhs.m_amount;}
 constexpr bool operator<=(const Information & rhs) const {return m_amount <= rhs.m_amount;}
@@ -65,7 +66,7 @@ constexpr bool operator<(const Information & rhs) const {return m_amount < rhs.m
 constexpr bool operator>(const Information & rhs) const {return m_amount > rhs.m_amount;}
 
 constexpr value_t to(const Information & rhs) const {return *this / rhs;}
-constexpr pair_t div(const Information & rhs) const {return pair(m_amount / rhs.m_amount, m_amount % rhs.m_amount);}
+constexpr pair_t div(const Information & rhs) const {return pair(*this / rhs, *this % rhs);}
 constexpr pair_t convert(const Information & rhs) const {return this->div(rhs);}
 
 friend constexpr Information operator"" _bit(unsigned long long x);
