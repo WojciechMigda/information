@@ -40,8 +40,6 @@ typedef struct pair
 } pair_t;
 constexpr Information() : m_amount(0){}
 constexpr Information(const Information & rhs) : m_amount(rhs.m_amount) {}
-constexpr value_t value(void) const {return m_amount;}
-constexpr value_t operator()(void) const {return value();}
 
 Information & operator+=(const Information &rhs)
 {
@@ -52,38 +50,6 @@ Information & operator-=(const Information &rhs)
 {
     m_amount -= rhs.m_amount;
     return *this;
-}
-
-Information & operator++(void)
-{
-    *this += 1;
-
-    return *this;
-}
-
-Information operator++(int)
-{
-    Information retval(*this);
-
-    ++(*this);
-
-    return retval;
-}
-
-Information & operator--(void)
-{
-    *this -= 1;
-
-    return *this;
-}
-
-Information operator--(int)
-{
-    Information retval(*this);
-
-    --(*this);
-
-    return retval;
 }
 
 constexpr Information operator+(const Information & rhs) const {return Information(m_amount + rhs.m_amount);}
@@ -111,7 +77,8 @@ friend constexpr Information operator"" _dword(unsigned long long x);
 friend constexpr Information operator"" _qword(unsigned long long x);
 
 private:
-std::size_t  m_amount;
+value_t     m_amount;
+
 constexpr Information(const value_t amount) : m_amount(amount) {}
 };
 
